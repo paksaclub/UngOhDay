@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ungohday/state/login.dart';
+import 'package:ungohday/state/page/home_page.dart';
+import 'package:ungohday/state/page/in_wh.dart';
+import 'package:ungohday/state/page/out_wh.dart';
+import 'package:ungohday/state/page/stock_wh.dart';
 import 'package:ungohday/state/storing.dart';
 import 'package:ungohday/utility/my_constant.dart';
 import 'package:ungohday/utility/my_style.dart';
@@ -13,7 +19,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   String name, type, storing;
-  Widget currentWidget;
+  Widget currentWidget = HomePage();
   List<String> types = List();
   List<String> titleMenus = MyConstant().titleMenus;
   List<IconData> iconMenus = MyConstant().iconMenus;
@@ -24,6 +30,14 @@ class _MainMenuState extends State<MainMenu> {
   List<Widget> showWidgets = List();
   List<List<String>> showSubTitles = List();
 
+  List<String> titleAppBars = [
+    'หน้าแรก',
+    'การรับเข้า WH',
+    'การส่งออก WH',
+    'สต๊อคใน WH'
+  ];
+  String titleAppBar;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,8 +45,9 @@ class _MainMenuState extends State<MainMenu> {
     name = widget.name;
     type = widget.type;
     storing = widget.storing;
-    print('name = $name, type = $type, storing = $storing');
-    createArea();
+    titleAppBar = titleAppBars[0];
+    // print('name = $name, type = $type, storing = $storing');
+    // createArea();
   }
 
   void createArea() {
@@ -62,10 +77,117 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(titleAppBar),
         backgroundColor: MyStyle().darkBackgroud,
       ),
-      drawer: buildDrawer(),
+      drawer: buildDrawer2(),
       body: currentWidget == null ? MyStyle().showProgress() : currentWidget,
+    );
+  }
+
+  Drawer buildDrawer2() => Drawer(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                buildUserAccountsDrawerHeader(),
+                buildListTileHome(),
+                buildListTileInWH(),
+                buildListTileOutWH(),
+                buildListTileStockWH(),
+              ],
+            ),
+            buildListTileSingOut()
+          ],
+        ),
+      );
+
+  ListTile buildListTileHome() {
+    return ListTile(
+      leading: Icon(Icons.home),
+      title: Text('หน้าแรก'),
+      onTap: () {
+        setState(() {
+          currentWidget = HomePage();
+          titleAppBar = titleAppBars[0];
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  ListTile buildListTileInWH() {
+    return ListTile(
+      leading: Icon(Icons.insert_invitation),
+      title: Text('การรับเข้า WH'),
+      onTap: () {
+        setState(() {
+          currentWidget = InWH();
+          titleAppBar = titleAppBars[1];
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  ListTile buildListTileOutWH() {
+    return ListTile(
+      leading: Icon(Icons.outbox),
+      title: Text('การส่งออก WH'),
+      onTap: () {
+        setState(() {
+          currentWidget = OutWH();
+          titleAppBar = titleAppBars[2];
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  ListTile buildListTileStockWH() {
+    return ListTile(
+      leading: Icon(Icons.memory),
+      title: Text('สต๊อคใน WH'),
+      onTap: () {
+        setState(() {
+          currentWidget = StockWH();
+          titleAppBar = titleAppBars[3];
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget buildListTileSingOut() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ListTile(
+          tileColor: Colors.red.shade700,
+          leading: Icon(
+            Icons.exit_to_app,
+            color: Colors.white,
+          ),
+          title: Text(
+            'ออกจากระบบ',
+            style: MyStyle().titelH2(),
+          ),
+          onTap: () async {
+            Navigator.pop(context);
+
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            preferences.clear();
+
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Login(),
+                ),
+                (route) => false);
+          },
+        ),
+      ],
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ungohday/state/login.dart';
 
@@ -7,6 +8,25 @@ class SingIn extends StatefulWidget {
 }
 
 class _SingInState extends State<SingIn> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // testAPI();
+  }
+
+  Future<Null> testAPI() async {
+    String path =
+        'http://183.88.213.12/wsvvpack/wsvvpack.asmx/GETLOGIN?EMPCODE=E01&EMPPASSWORD=81DC9BDB52D04DC20036DBD8313ED055';
+    print('path API ==>> $path');
+    await Dio().get(path).then((value) {
+      print('value ==>> $value');
+      for (var item in value.data) {
+        print('item ==>> $item');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
