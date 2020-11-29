@@ -22,6 +22,13 @@ class MyStyle {
     return BoxDecoration(color: Colors.white);
   }
 
+  BoxDecoration boxDecorationTextField2() {
+    return BoxDecoration(
+      color: Colors.grey.shade300,
+      borderRadius: BorderRadius.circular(18),
+    );
+  }
+
   TextStyle titelH1() {
     return TextStyle(
       fontSize: 30,

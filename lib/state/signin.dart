@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ungohday/state/login.dart';
@@ -18,11 +20,14 @@ class _SingInState extends State<SingIn> {
   Future<Null> testAPI() async {
     String path =
         'http://183.88.213.12/wsvvpack/wsvvpack.asmx/GETLOGIN?EMPCODE=E01&EMPPASSWORD=81DC9BDB52D04DC20036DBD8313ED055';
-    print('path API ==>> $path');
+    print('############# path API ==>> $path');
+
+   
+
     await Dio().get(path).then((value) {
-      print('value ==>> $value');
-      for (var item in value.data) {
-        print('item ==>> $item');
+      print('############ value ==>> $value');
+      for (var item in json.decode(value.data)) {
+        print('################# item ==>> $item');
       }
     });
   }
