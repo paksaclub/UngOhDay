@@ -5,9 +5,12 @@ import 'package:ungohday/state/page/home_page.dart';
 import 'package:ungohday/state/page/in_wh.dart';
 import 'package:ungohday/state/page/out_wh.dart';
 import 'package:ungohday/state/page/stock_wh.dart';
+import 'package:ungohday/state/page/supplying_page.dart';
 import 'package:ungohday/state/storing.dart';
 import 'package:ungohday/utility/my_constant.dart';
 import 'package:ungohday/utility/my_style.dart';
+
+import 'supplying.dart';
 
 class MainMenu extends StatefulWidget {
   final String name, type, storing;
@@ -34,7 +37,8 @@ class _MainMenuState extends State<MainMenu> {
     'หน้าแรก',
     'การรับเข้า WH',
     'การส่งออก WH',
-    'สต๊อคใน WH'
+    'สต๊อคใน WH',
+    'Supplying'
   ];
   String titleAppBar;
 
@@ -92,16 +96,31 @@ class _MainMenuState extends State<MainMenu> {
               children: [
                 buildUserAccountsDrawerHeader(),
                 buildListTileHome(),
-                buildListTileInWH(),
-                buildListTileOutWH(),
-                buildListTileStockWH(),
+                buildListTileSupplying(),
+                //buildListTileHome(),
+                //buildListTileInWH(),
+                //buildListTileOutWH(),
+                //buildListTileStockWH(),
               ],
             ),
             buildListTileSingOut()
           ],
         ),
       );
+  ListTile buildListTileSupplying() {
+    return ListTile(
+      leading: Icon(Icons.support_outlined),
+      title: Text('Supplying'),
+      onTap: () {
+        setState(() {
 
+          currentWidget = SupplyingPage();
+          titleAppBar = titleAppBars[4];
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
   ListTile buildListTileHome() {
     return ListTile(
       leading: Icon(Icons.home),
