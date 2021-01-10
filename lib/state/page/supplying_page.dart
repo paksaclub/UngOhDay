@@ -131,7 +131,7 @@ class _SupplyingPageState extends State<SupplyingPage> {
           onTap: () {
             print('You Click index = $index');
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SupplyingDetail(),
+              builder: (context) => SupplyingDetail(model:supplyingModels[index],),
             ));
           },
           child: Card(
